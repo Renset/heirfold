@@ -1,0 +1,7 @@
+{$HEIRFOLD_PUBLIC_HOST} {
+	encode gzip
+	reverse_proxy heirfold:8080
+	log {
+		output discard
+	}
+}

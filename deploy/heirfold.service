@@ -1,0 +1,51 @@
+# A hardened systemd unit for one binary behind a reverse proxy.
+#
+# 1. Copy the binary to /usr/local/bin/heirfold.
+# 2. Set your host name in HEIRFOLD_PUBLIC_HOST below.
+# 3. Copy this file to /etc/systemd/system/.
+# 4. Run: systemctl enable --now heirfold
+# 5. Read the first-run link: journalctl -u heirfold
+[Unit]
+Description=Heirfold family tree
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/heirfold serve
+Environment=HEIRFOLD_DATA=/var/lib/heirfold
+Environment=HEIRFOLD_LISTEN=127.0.0.1:8080
+Environment=HEIRFOLD_BEHIND_HTTPS_PROXY=true
+Environment=HEIRFOLD_PUBLIC_HOST=family.example.org
+Environment=HEIRFOLD_TRUSTED_PROXIES=127.0.0.1
+DynamicUser=yes
+StateDirectory=heirfold
+StateDirectoryMode=0700
+Restart=on-failure
+
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @resources
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

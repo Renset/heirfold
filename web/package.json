@@ -1,0 +1,26 @@
+{
+  "name": "heirfold-web",
+  "version": "0.1.0",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "build:demo": "node build.mjs --demo",
+    "watch": "node build.mjs --watch",
+    "check": "tsc --noEmit && biome check src test *.mjs scripts && node scripts/check-sinks.mjs",
+    "format": "biome format --write src test *.mjs scripts",
+    "test": "node build.mjs --tests && node --test test-dist/*.test.js"
+  },
+  "dependencies": {
+    "@preact/signals": "2.11.4",
+    "pdfjs-dist": "6.4.299",
+    "preact": "11.1.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.4",
+    "@types/node": "24.19.2",
+    "esbuild": "0.28.2",
+    "typescript": "7.0.2"
+  }
+}

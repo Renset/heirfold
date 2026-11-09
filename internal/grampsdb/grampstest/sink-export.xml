@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE database PUBLIC "-//Gramps//DTD Gramps XML 1.7.2//EN"
+"http://gramps-project.org/xml/1.7.2/grampsxml.dtd">
+<database xmlns="http://gramps-project.org/xml/1.7.2/">
+  <header>
+    <created date="2026-11-09" version="6.0.8"/>
+    <researcher>
+      <resname>Test Keeper</resname>
+      <resaddr>1 Sample Lane</resaddr>
+      <rescity>Nowhere</rescity>
+      <rescountry>Utopia</rescountry>
+      <resemail>keeper@example.org</resemail>
+    </researcher>
+    <mediapath>/srv/invented-media</mediapath>
+  </header>
+  <name-formats>
+    <format number="-1" name="Surname Given" fmt_str="SURNAME given" active="1"/>
+  </name-formats>
+  <tags>
+    <tag handle="_t0001" change="1700000001" name="ToDo" color="#EF2929" priority="0"/>
+    <tag handle="_t0002" change="1700000002" name="Checked &amp; done" color="#000000000000" priority="1"/>
+  </tags>
+  <events>
+    <event handle="_e0001" change="1700000010" id="E0001">
+      <type>Birth</type>
+      <dateval val="1871-03-05"/>
+      <place hlink="_p0003"/>
+      <description>Birth of Orlin</description>
+      <attribute type="Time" value="about noon"/>
+      <noteref hlink="_n0001"/>
+      <citationref hlink="_c0001"/>
+      <objref hlink="_o0001"/>
+      <tagref hlink="_t0001"/>
+    </event>
+    <event handle="_e0002" change="1700000011" id="E0002" priv="1">
+      <type>Death</type>
+      <dateval val="1944-01" type="about" quality="estimated"/>
+      <place hlink="_p0002"/>
+    </event>
+    <event handle="_e0003" change="1700000012" id="E0003">
+      <type>Marriage</type>
+      <daterange start="1895" stop="1897-06-30" quality="calculated"/>
+    </event>
+    <event handle="_e0004" change="1700000013" id="E0004">
+      <type>Residence</type>
+      <datespan start="1900-01-01" stop="1910" cformat="Julian"/>
+    </event>
+    <event handle="_e0005" change="1700000014" id="E0005">
+      <type>Barn raising</type>
+      <datestr val="in the spring after the flood"/>
+    </event>
+    <event handle="_e0006" change="1700000015" id="E0006">
+      <type>Baptism</type>
+      <dateval val="1750-02-11" cformat="Julian" dualdated="1" newyear="Mar25"/>
+    </event>
+    <event handle="_e0007" change="1700000016" id="E0007">
+      <type>Occupation</type>
+      <dateval val="1920" type="from"/>
+      <description>Miller</description>
+    </event>
+    <event handle="_e0008" change="1700000017" id="E0008">
+      <type>Census</type>
+      <dateval val="1897-??-09" type="before"/>
+    </event>
+    <event handle="_e0009" change="1700000018" id="E0009">
+      <type>Burial</type>
+      <dateval val="1950" type="to" cformat="Hebrew"/>
+    </event>
+    <event handle="_e0010" change="1700000019" id="E0010">
+      <type>Birth</type>
+      <dateval val="1899-12-31" type="after"/>
+    </event>
+  </events>
+  <people home="_i0001">
+    <person handle="_i0001" change="1700000020" id="I0001">
+      <gender>M</gender>
+      <name type="Birth Name" sort="2" display="3">
+        <first>Orlin</first>
+        <call>Orlin</call>
+        <surname prefix="van" derivation="Inherited">Quillfeather</surname>
+        <surname prim="0" connector="and" derivation="Patronymic">Brandovich</surname>
+        <suffix>Sr.</suffix>
+        <title>Dr.</title>
+        <nick>Orly</nick>
+        <familynick>The Millers</familynick>
+        <group>Quillfeather-group</group>
+        <dateval val="1871"/>
+        <noteref hlink="_n0002"/>
+        <citationref hlink="_c0001"/>
+      </name>
+      <name alt="1" type="Also Known As" priv="1">
+        <first>Орлин</first>
+        <surname>Перокрылов</surname>
+      </name>
+      <name alt="1" type="Stage name">
+        <first>Lin</first>
+        <surname derivation="Pseudonym">Featherby</surname>
+      </name>
+      <eventref hlink="_e0001" role="Primary"/>
+      <eventref hlink="_e0002" priv="1" role="Primary">
+        <attribute type="Age" value="72">
+          <citationref hlink="_c0002"/>
+          <noteref hlink="_n0001"/>
+        </attribute>
+        <noteref hlink="_n0003"/>
+        <citationref hlink="_c0001"/>
+      </eventref>
+      <eventref hlink="_e0007" role="Miller's helper"/>
+      <lds_ord type="baptism" priv="1">
+        <dateval val="1880-05-01"/>
+        <temple val="LOGAN"/>
+        <place hlink="_p0002"/>
+        <status val="Completed"/>
+        <noteref hlink="_n0001"/>
+        <citationref hlink="_c0001"/>
+      </lds_ord>
+      <objref hlink="_o0001">
+       <region corner1_x="10" corner1_y="20" corner2_x="60" corner2_y="80"/>
+        <attribute type="Description" value="Cropped face"/>
+        <citationref hlink="_c0001"/>
+        <noteref hlink="_n0001"/>
+      </objref>
+      <objref hlink="_o0002" priv="1"/>
+      <address priv="1">
+        <dateval val="1901"/>
+        <street>4 Mill Row</street>
+        <locality>Old Quarter</locality>
+        <city>Nowhere</city>
+        <county>Dreamshire</county>
+        <state>North</state>
+        <country>Utopia</country>
+        <postal>00001</postal>
+        <phone>555-0100</phone>
+        <noteref hlink="_n0001"/>
+        <citationref hlink="_c0001"/>
+      </address>
+      <attribute type="Occupation" value="Miller"/>
+      <attribute priv="1" type="Shoe size" value="44">
+        <noteref hlink="_n0001"/>
+      </attribute>
+      <url priv="1"  href="https://example.org/orlin" type="Web Home" description="Home page"/>
+      <url  href="mailto:orlin@example.org" type="E-mail"/>
+      <url  href="https://example.org/blog" type="Blog"/>
+      <childof hlink="_f0002"/>
+      <parentin hlink="_f0001"/>
+      <personref hlink="_i0004" priv="1" rel="Godfather">
+        <citationref hlink="_c0001"/>
+        <noteref hlink="_n0001"/>
+      </personref>
+      <noteref hlink="_n0001"/>
+      <noteref hlink="_n0004"/>
+      <citationref hlink="_c0001"/>
+      <tagref hlink="_t0001"/>
+      <tagref hlink="_t0002"/>
+    </person>
+    <person handle="_i0002" change="1700000021" id="I0002" priv="1">
+      <gender>F</gender>
+      <name type="Married Name">
+        <first>Velda</first>
+        <surname>Quillfeather</surname>
+      </name>
+      <name alt="1" type="Birth Name">
+        <first>Velda</first>
+        <surname>Thistlewood</surname>
+      </name>
+      <eventref hlink="_e0010" role="Primary"/>
+      <parentin hlink="_f0001"/>
+    </person>
+    <person handle="_i0003" change="1700000022" id="I0003">
+      <gender>U</gender>
+      <name type="Unknown">
+        <first>Pip</first>
+        <surname derivation="Location">Quillfeather</surname>
+      </name>
+      <eventref hlink="_e0006" role="Witness"/>
+      <childof hlink="_f0001"/>
+    </person>
+    <person handle="_i0004" change="1794258695" id="I0004">
+      <gender>X</gender>
+      <name type="Birth Name">
+        <first>Sorrel</first>
+        <surname>Marrowby</surname>
+      </name>
+      <childof hlink="_f0001"/>
+      <parentin hlink="_f0003"/>
+    </person>
+    <person handle="_i0005" change="1700000024" id="I0005">
+      <gender>M</gender>
+      <name type="Birth Name">
+        <first>Brand</first>
+        <surname>Quillfeather</surname>
+      </name>
+      <eventref hlink="_e0009" role="Primary"/>
+      <parentin hlink="_f0002"/>
+    </person>
+  </people>
+  <families>
+    <family handle="_f0001" change="1700000030" id="F0001">
+      <rel type="Married"/>
+      <father hlink="_i0001"/>
+      <mother hlink="_i0002"/>
+      <eventref hlink="_e0003" role="Family">
+        <attribute type="Witness" value="Two neighbours"/>
+      </eventref>
+      <lds_ord type="sealed_to_spouse">
+        <temple val="SLAKE"/>
+        <status val="Cleared"/>
+      </lds_ord>
+      <objref hlink="_o0002"/>
+      <childref hlink="_i0003"/>
+      <childref hlink="_i0004" priv="1" mrel="Adopted" frel="Foster">
+        <citationref hlink="_c0002"/>
+        <noteref hlink="_n0001"/>
+      </childref>
+      <attribute type="Number of Children" value="2"/>
+      <noteref hlink="_n0001"/>
+      <citationref hlink="_c0002"/>
+      <tagref hlink="_t0002"/>
+    </family>
+    <family handle="_f0002" change="1700000031" id="F0002" priv="1">
+      <rel type="Handfasted"/>
+      <father hlink="_i0005"/>
+      <eventref hlink="_e0004" role="Family"/>
+      <childref hlink="_i0001" frel="Ward of the mill"/>
+    </family>
+    <family handle="_f0003" change="1700000032" id="F0003">
+      <rel type="Civil Union"/>
+      <mother hlink="_i0004"/>
+    </family>
+  </families>
+  <citations>
+    <citation handle="_c0001" change="1700000040" id="C0001">
+      <dateval val="1998-04-02"/>
+      <page>p. 47, line 3</page>
+      <confidence>3</confidence>
+      <noteref hlink="_n0001"/>
+      <objref hlink="_o0003">
+       <region corner1_x="0" corner1_y="50" corner2_x="100" corner2_y="75"/>
+      </objref>
+      <srcattribute type="Volume" value="II"/>
+      <srcattribute priv="1" type="Shelf" value="B-12"/>
+      <sourceref hlink="_s0001"/>
+      <tagref hlink="_t0001"/>
+    </citation>
+    <citation handle="_c0002" change="1700000041" id="C0002" priv="1">
+      <confidence>0</confidence>
+      <sourceref hlink="_s0002"/>
+    </citation>
+  </citations>
+  <sources>
+    <source handle="_s0001" change="1700000050" id="S0001">
+      <stitle>The Book of Invented Millers</stitle>
+      <sauthor>A. Scribe</sauthor>
+      <spubinfo>Nowhere Press, 1998</spubinfo>
+      <sabbrev>Millers</sabbrev>
+      <noteref hlink="_n0001"/>
+      <objref hlink="_o0003"/>
+      <srcattribute type="Edition" value="2nd"/>
+      <reporef hlink="_r0001" priv="1" callno="929.2 MIL" medium="Book">
+        <noteref hlink="_n0001"/>
+      </reporef>
+      <reporef hlink="_r0002" medium="Photocopy of a copy"/>
+      <tagref hlink="_t0002"/>
+    </source>
+    <source handle="_s0002" change="1700000051" id="S0002" priv="1">
+      <stitle>Family notebook</stitle>
+    </source>
+  </sources>
+  <places>
+    <placeobj handle="_p0001" change="1700000060" id="P0001" type="Country">
+      <ptitle>Utopia</ptitle>
+      <code>UT</code>
+      <pname value="Utopia"/>
+      <pname value="Утопия" lang="ru"/>
+      <pname value="Old Utopia">
+        <daterange start="1500" stop="1700"/>
+      </pname>
+    </placeobj>
+    <placeobj handle="_p0002" change="1700000061" id="P0002" type="Province">
+      <pname value="Dreamshire"/>
+      <placeref hlink="_p0001"/>
+    </placeobj>
+    <placeobj handle="_p0003" change="1700000062" id="P0003" priv="1" type="Village">
+      <ptitle>Nowhere, Dreamshire, Utopia</ptitle>
+      <pname value="Nowhere"/>
+      <coord long="12.5" lat="-45.25"/>
+      <placeref hlink="_p0002">
+        <dateval val="1800" type="after"/>
+      </placeref>
+      <location street="Mill Row" locality="Old Quarter" city="Nowhere" parish="St. Nobody" county="Dreamshire" state="North" country="Utopia" postal="00001" phone="555-0101"/>
+      <objref hlink="_o0002"/>
+  <url  href="https://example.org/nowhere" type="Web Search" description="About the village"/>
+      <noteref hlink="_n0001"/>
+      <citationref hlink="_c0001"/>
+      <tagref hlink="_t0001"/>
+    </placeobj>
+    <placeobj handle="_p0004" change="1700000063" id="P0004" type="Mill pond">
+      <pname value="Long Pond"/>
+      <placeref hlink="_p0003"/>
+    </placeobj>
+  </places>
+  <objects>
+    <object handle="_o0001" change="1700000070" id="O0001">
+      <file src="photos/orlin.jpg" mime="image/jpeg" checksum="0123456789abcdef0123456789abcdef" description="Orlin at the mill"/>
+      <attribute type="Photographer" value="Unknown hand"/>
+      <noteref hlink="_n0001"/>
+      <dateval val="1905" type="about"/>
+      <citationref hlink="_c0001"/>
+      <tagref hlink="_t0001"/>
+    </object>
+    <object handle="_o0002" change="1700000071" id="O0002" priv="1">
+      <file src="/srv/invented-media/letters/letter-1.png" mime="image/png" description="A letter"/>
+    </object>
+    <object handle="_o0003" change="1700000072" id="O0003">
+      <file src="book/page-47.jpg" mime="image/jpeg" description="Page 47"/>
+    </object>
+    <object handle="_o0004" change="1700000073" id="O0004">
+      <file src="book/notes.pdf" mime="application/pdf"/>
+    </object>
+  </objects>
+  <repositories>
+    <repository handle="_r0001" change="1700000080" id="R0001">
+      <rname>Nowhere Town Library</rname>
+      <type>Library</type>
+      <address>
+        <street>2 Reading Road</street>
+        <city>Nowhere</city>
+      </address>
+      <url  href="https://example.org/library" type="Web Home"/>
+      <noteref hlink="_n0001"/>
+      <tagref hlink="_t0002"/>
+    </repository>
+    <repository handle="_r0002" change="1700000081" id="R0002" priv="1">
+      <rname>Attic of the mill</rname>
+      <type>Family attic</type>
+    </repository>
+  </repositories>
+  <notes>
+    <note handle="_n0001" change="1700000090" id="N0001" type="General">
+      <text>A plain note about the invented mill.</text>
+    </note>
+    <note handle="_n0002" change="1700000091" id="N0002" type="Name Note" format="1">
+      <text>Line one
+  line two keeps   its spaces
+Line three</text>
+      <tagref hlink="_t0001"/>
+    </note>
+    <note handle="_n0003" change="1700000092" id="N0003" priv="1" type="Research">
+      <text>Bold start, a link and big red text.</text>
+      <style name="bold">
+        <range start="0" end="10"/>
+        <range start="14" end="18"/>
+      </style>
+      <style name="link" value="gramps://Person/handle/i0004">
+        <range start="14" end="18"/>
+      </style>
+      <style name="fontsize" value="18">
+        <range start="23" end="26"/>
+      </style>
+      <style name="fontcolor" value="#ff0000">
+        <range start="27" end="30"/>
+      </style>
+      <style name="italic">
+        <range start="31" end="35"/>
+      </style>
+    </note>
+    <note handle="_n0004" change="1700000093" id="N0004" type="Family legend">
+      <text>История о мельнице, которую придумали для проверки.</text>
+    </note>
+  </notes>
+  <bookmarks>
+    <bookmark target="person" hlink="_i0001"/>
+    <bookmark target="person" hlink="_i0003"/>
+    <bookmark target="family" hlink="_f0001"/>
+    <bookmark target="event" hlink="_e0001"/>
+    <bookmark target="source" hlink="_s0001"/>
+    <bookmark target="citation" hlink="_c0001"/>
+    <bookmark target="place" hlink="_p0003"/>
+    <bookmark target="media" hlink="_o0001"/>
+    <bookmark target="repository" hlink="_r0001"/>
+    <bookmark target="note" hlink="_n0001"/>
+  </bookmarks>
+  <namemaps>
+    <map type="group_as" key="Marrowby" value="Featherfolk"/>
+    <map type="group_as" key="Quillfeather" value="Featherfolk"/>
+  </namemaps>
+</database>

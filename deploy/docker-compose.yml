@@ -1,0 +1,56 @@
+# Runs Heirfold behind Caddy, which gets a TLS certificate automatically.
+#
+# 1. Point a DNS record at your server.
+# 2. Set the name: export HEIRFOLD_PUBLIC_HOST=family.example.org
+# 3. Start: docker compose up -d --build
+# 4. Read the first-run link: docker compose logs heirfold
+services:
+  heirfold:
+    build: ..
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    environment:
+      HEIRFOLD_BEHIND_HTTPS_PROXY: "true"
+      HEIRFOLD_PUBLIC_HOST: ${HEIRFOLD_PUBLIC_HOST:?set HEIRFOLD_PUBLIC_HOST}
+      HEIRFOLD_TRUSTED_PROXIES: 172.16.0.0/12
+      # Letters with sign-in codes. Without them each code goes to the log:
+      # docker compose logs heirfold
+      HEIRFOLD_MAIL_FROM: ${HEIRFOLD_MAIL_FROM:-}
+      HEIRFOLD_SMTP_HOST: ${HEIRFOLD_SMTP_HOST:-}
+      HEIRFOLD_SMTP_PORT: ${HEIRFOLD_SMTP_PORT:-465}
+      HEIRFOLD_SMTP_USER: ${HEIRFOLD_SMTP_USER:-}
+      HEIRFOLD_SMTP_PASSWORD: ${HEIRFOLD_SMTP_PASSWORD:-}
+      HEIRFOLD_RESEND_KEY: ${HEIRFOLD_RESEND_KEY:-}
+    volumes:
+      - heirfold-data:/data
+    networks: [internal]
+
+  caddy:
+    image: caddy:2-alpine@sha256:78bd35025c7ba85961dd149ae670315129954e77abe2383ac47c89106b35ade9
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    security_opt: ["no-new-privileges:true"]
+    environment:
+      HEIRFOLD_PUBLIC_HOST: ${HEIRFOLD_PUBLIC_HOST:?set HEIRFOLD_PUBLIC_HOST}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks: [internal]
+    depends_on: [heirfold]
+
+volumes:
+  heirfold-data:
+  caddy-data:
+  caddy-config:
+
+networks:
+  internal:

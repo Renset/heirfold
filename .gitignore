@@ -1,0 +1,48 @@
+# Build output
+/heirfold
+/heirfold.exe
+/dist/
+/dist-demo/
+/web/dist-demo/
+/web/test-dist/
+/internal/web/dist/*
+!/internal/web/dist/.gitkeep
+
+# Dependencies
+node_modules/
+
+# The large face recognition model. "make models" gets it.
+/internal/faces/models/face_recognition_sface_2021dec.onnx
+
+# Family data must never enter this repository.
+*.gramps
+*.gpkg
+*.ged
+*.gedcom
+*.paf
+*.ftm
+*.ftw
+*.grdb
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+/heirfold-data/
+/data/
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Local tools
+.DS_Store
+.idea/
+.vscode/
+coverage.out
+
+# Local Claude configuration
+.claude/
+.impeccable/
