@@ -14,11 +14,11 @@
   },
   "dependencies": {
     "@preact/signals": "2.11.4",
-    "pdfjs-dist": "6.4.299",
-    "preact": "11.1.0"
+    "pdfjs-dist": "6.5.438",
+    "preact": "11.2.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.6.4",
+    "@biomejs/biome": "2.6.6",
     "@types/node": "24.19.2",
     "esbuild": "0.28.2",
     "typescript": "7.0.2"
