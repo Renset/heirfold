@@ -418,7 +418,7 @@ func TestLogWritesTheCodeAndNotTheAddress(t *testing.T) {
 }
 
 func TestResendSend(t *testing.T) {
-	const key = "re_test_SECRETKEY123"
+	const key = "re_test"
 	type call struct {
 		method, path, authorization, contentType string
 		body                                     []byte
@@ -484,7 +484,7 @@ func TestResendSend(t *testing.T) {
 }
 
 func TestResendDoesNotFollowRedirects(t *testing.T) {
-	const key = "re_test_SECRETKEY123"
+	const key = "re_test"
 	var followed atomic.Int32
 	other := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { followed.Add(1) }))
 	defer other.Close()
@@ -505,7 +505,7 @@ func TestResendDoesNotFollowRedirects(t *testing.T) {
 }
 
 func TestResendNetworkErrorHidesTheKey(t *testing.T) {
-	const key = "re_test_SECRETKEY123"
+	const key = "re_test"
 	api := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {}))
 	endpoint := api.URL
 	api.Close()

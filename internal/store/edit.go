@@ -323,7 +323,7 @@ func (e *Edit) current(key string) ([]byte, bool, int64, error) {
 // so an undo brings it back.
 const (
 	kindMeta   model.Kind = "meta"
-	metaHandle            = "tree"
+	metaHandle string     = "tree"
 )
 
 // putMeta writes the meta document, or removes it for nil.
@@ -596,6 +596,54 @@ func (s *Store) CountChanges(ctx context.Context) (int, error) {
 	return n, err
 }
 
+// undoChanges returns the changes that take one journal entry back: each
+// record of the entry with its two sides swapped.
+func undoChanges(ctx context.Context, tx *sql.Tx, id int64) ([]docChange, error) {
+	rows, err := tx.QueryContext(ctx, `SELECT kind, handle, gid, before, after FROM change_item WHERE set_id = ?`, id)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = rows.Close() }()
+	var changes []docChange
+	for rows.Next() {
+		var kind, handle, gid string
+		var before, after sql.NullString
+		if err := rows.Scan(&kind, &handle, &gid, &before, &after); err != nil {
+			return nil, err
+		}
+		change := docChange{kind: model.Kind(kind), handle: handle, gid: gid}
+		if after.Valid {
+			change.before = []byte(after.String)
+		}
+		if before.Valid {
+			change.after = []byte(before.String)
+		}
+		changes = append(changes, change)
+	}
+	return changes, rows.Err()
+}
+
+// usedOutside reports whether a record outside the journal entry names the
+// handle in the needle.
+func usedOutside(ctx context.Context, tx *sql.Tx, needle string, inEntry map[string]bool) (bool, error) {
+	users, err := tx.QueryContext(ctx, `SELECT kind, handle FROM object WHERE instr(doc, ?) > 0`, needle)
+	if err != nil {
+		return false, err
+	}
+	defer func() { _ = users.Close() }()
+	outside := false
+	for users.Next() {
+		var kind, handle string
+		if err := users.Scan(&kind, &handle); err != nil {
+			return false, err
+		}
+		if !inEntry[recordKey(model.Kind(kind), handle)] {
+			outside = true
+		}
+	}
+	return outside, users.Err()
+}
+
 // UndoChange takes one journal entry back. It works only while every object
 // of the entry still has the state that the entry left, so a later edit of
 // the same object must be undone first.
@@ -617,29 +665,8 @@ func (s *Store) UndoChange(ctx context.Context, actor Actor, id int64) (*EditRes
 	if undone.Valid {
 		return nil, ErrConflict
 	}
-	rows, err := tx.QueryContext(ctx, `SELECT kind, handle, gid, before, after FROM change_item WHERE set_id = ?`, id)
+	changes, err := undoChanges(ctx, tx, id)
 	if err != nil {
-		return nil, err
-	}
-	var changes []docChange
-	for rows.Next() {
-		var kind, handle, gid string
-		var before, after sql.NullString
-		if err := rows.Scan(&kind, &handle, &gid, &before, &after); err != nil {
-			_ = rows.Close()
-			return nil, err
-		}
-		// The undo swaps the two sides.
-		change := docChange{kind: model.Kind(kind), handle: handle, gid: gid}
-		if after.Valid {
-			change.before = []byte(after.String)
-		}
-		if before.Valid {
-			change.after = []byte(before.String)
-		}
-		changes = append(changes, change)
-	}
-	if err := rows.Close(); err != nil {
 		return nil, err
 	}
 	if len(changes) == 0 {
@@ -693,22 +720,8 @@ func (s *Store) UndoChange(ctx context.Context, actor Actor, id int64) (*EditRes
 			continue
 		}
 		needle := `"` + change.handle + `"`
-		users, err := tx.QueryContext(ctx, `SELECT kind, handle FROM object WHERE instr(doc, ?) > 0`, needle)
+		blocked, err := usedOutside(ctx, tx, needle, inEntry)
 		if err != nil {
-			return nil, err
-		}
-		blocked := false
-		for users.Next() {
-			var kind, handle string
-			if err := users.Scan(&kind, &handle); err != nil {
-				_ = users.Close()
-				return nil, err
-			}
-			if !inEntry[recordKey(model.Kind(kind), handle)] {
-				blocked = true
-			}
-		}
-		if err := users.Close(); err != nil {
 			return nil, err
 		}
 		var meta string

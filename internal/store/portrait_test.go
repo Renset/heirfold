@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"errors"
 	"testing"
 
 	"github.com/Renset/heirfold/internal/model"
@@ -227,13 +228,13 @@ func TestFamilyMemberChangesOnlyTheOwnPictures(t *testing.T) {
 		"a mark of another person":     func(e *Edit) error { return e.MarkFace(photo, "I0001", face) },
 		"a picture and something else": func(e *Edit) error { _ = e.ClearPortrait("I0002"); return e.MarkFace(photo, "I0001", face) },
 	} {
-		if err := as("test.refused", fn); err != ErrOutsideBranch {
+		if err := as("test.refused", fn); !errors.Is(err, ErrOutsideBranch) {
 			t.Errorf("%s: got %v, want %v", name, err, ErrOutsideBranch)
 		}
 	}
 	if _, err := st.Edit(context.Background(), Actor{ID: 8, Pictures: "I9999"}, "media.add", func(e *Edit) error {
 		return e.AddPhoto("I0002", "heirfold/z.jpg", "image/jpeg", "")
-	}); err != ErrOutsideBranch {
+	}); !errors.Is(err, ErrOutsideBranch) {
 		t.Errorf("an account of an unknown person: %v", err)
 	}
 }

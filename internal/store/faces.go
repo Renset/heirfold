@@ -344,12 +344,12 @@ func (v *View) FoundFaces(ctx context.Context, mediaID string) (*PhotoFaces, err
 		if err != nil {
 			return nil, err
 		}
+		defer func() { _ = rows.Close() }()
 		for rows.Next() {
 			var media string
 			var face FoundFace
 			var vector []byte
 			if err := rows.Scan(&media, &face.X1, &face.Y1, &face.X2, &face.Y2, &vector); err != nil {
-				_ = rows.Close()
 				return nil, err
 			}
 			for _, mark := range marks[media] {
@@ -359,7 +359,7 @@ func (v *View) FoundFaces(ctx context.Context, mediaID string) (*PhotoFaces, err
 				}
 			}
 		}
-		if err := rows.Close(); err != nil {
+		if err := rows.Err(); err != nil {
 			return nil, err
 		}
 	}

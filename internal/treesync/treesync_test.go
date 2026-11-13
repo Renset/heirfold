@@ -2,6 +2,7 @@ package treesync
 
 import (
 	"context"
+	"errors"
 	"io"
 	"log/slog"
 	"os"
@@ -92,7 +93,7 @@ func TestSyncFollowsTheGrampsTree(t *testing.T) {
 	if changed, err := syncer.Sync(ctx, false); err != nil || !changed {
 		t.Fatalf("deleted person: changed=%t err=%v", changed, err)
 	}
-	if _, err := st.View(privacy.Full).Person(ctx, "I0003"); err != store.ErrNotFound {
+	if _, err := st.View(privacy.Full).Person(ctx, "I0003"); !errors.Is(err, store.ErrNotFound) {
 		t.Fatalf("deleted person is still there: %v", err)
 	}
 }

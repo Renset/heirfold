@@ -162,6 +162,7 @@ func (v *View) Gallery(ctx context.Context) ([]GalleryPhoto, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer func() { _ = rows.Close() }()
 	type entry struct {
 		handle string
 		photo  GalleryPhoto
@@ -175,7 +176,6 @@ func (v *View) Gallery(ctx context.Context) ([]GalleryPhoto, error) {
 		var dated string
 		var placeText sql.NullString
 		if err := rows.Scan(&handle, &row.gid, &row.private, &row.living, &row.path, &row.mime, &row.description, &row.date, &gallery, &change, &dated, &placeText); err != nil {
-			_ = rows.Close()
 			return nil, err
 		}
 		if !IsImage(row.mime) || !v.allows(row.private, row.living) || (evidence[handle] && !gallery) {
@@ -215,7 +215,7 @@ func (v *View) Gallery(ctx context.Context) ([]GalleryPhoto, error) {
 		}
 		entries = append(entries, entry{handle: handle, photo: photo})
 	}
-	if err := rows.Close(); err != nil {
+	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 	out := make([]GalleryPhoto, 0, len(entries))

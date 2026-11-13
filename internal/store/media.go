@@ -69,8 +69,7 @@ func mediaOfLiving(t *model.Tree, living map[string]bool) map[string]bool {
 	out := map[string]bool{}
 	seenCitation := map[string]bool{}
 	var addMedia func(refs []model.MediaRef)
-	var addCitations func(refs []model.Ref)
-	addCitations = func(refs []model.Ref) {
+	addCitations := func(refs []model.Ref) {
 		for _, ref := range refs {
 			if seenCitation[ref.HLink] {
 				continue

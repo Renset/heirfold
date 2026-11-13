@@ -2346,7 +2346,7 @@ func TestJournalListsTheEdits(t *testing.T) {
 	// An edit that changes nothing and an edit that fails write no entry.
 	noChange(t, st, "no change", func(e *Edit) error { return e.SetHome("I0001") })
 	refuse(t, st, ErrNotFound, "failure", func(e *Edit) error { return e.DeletePerson("I0999") })
-	if !(first.ChangeID < second.ChangeID && second.ChangeID < third.ChangeID) {
+	if first.ChangeID >= second.ChangeID || second.ChangeID >= third.ChangeID {
 		t.Fatalf("the numbers of the entries do not grow: %d %d %d", first.ChangeID, second.ChangeID, third.ChangeID)
 	}
 

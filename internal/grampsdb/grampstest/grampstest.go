@@ -8,6 +8,7 @@ package grampstest
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"database/sql"
 	_ "embed" // the test data
 	"encoding/json"
@@ -56,11 +57,11 @@ func BuildTree(t testing.TB, version string) string {
 	}
 	defer func() { _ = db.Close() }()
 	for _, table := range objectTables {
-		if _, err := db.Exec(`CREATE TABLE ` + table + ` (handle VARCHAR(50) PRIMARY KEY NOT NULL, json_data TEXT)`); err != nil {
+		if _, err := db.ExecContext(context.Background(), `CREATE TABLE `+table+` (handle VARCHAR(50) PRIMARY KEY NOT NULL, json_data TEXT)`); err != nil {
 			t.Fatal(err)
 		}
 	}
-	if _, err := db.Exec(`CREATE TABLE metadata (setting VARCHAR(50) PRIMARY KEY NOT NULL, json_data TEXT, value BLOB);
+	if _, err := db.ExecContext(context.Background(), `CREATE TABLE metadata (setting VARCHAR(50) PRIMARY KEY NOT NULL, json_data TEXT, value BLOB);
 CREATE TABLE name_group (name VARCHAR(50) PRIMARY KEY NOT NULL, grouping TEXT)`); err != nil {
 		t.Fatal(err)
 	}
@@ -76,15 +77,15 @@ CREATE TABLE name_group (name VARCHAR(50) PRIMARY KEY NOT NULL, grouping TEXT)`)
 			if item.Setting == "version" && version != "" {
 				item.JSON = `{"type":"str","value":"` + version + `"}`
 			}
-			_, err = db.Exec(`INSERT INTO metadata (setting, json_data) VALUES (?, ?)`, item.Setting, item.JSON)
+			_, err = db.ExecContext(context.Background(), `INSERT INTO metadata (setting, json_data) VALUES (?, ?)`, item.Setting, item.JSON)
 		case "name_group":
-			_, err = db.Exec(`INSERT INTO name_group (name, grouping) VALUES (?, ?)`, item.Name, item.Grouping)
+			_, err = db.ExecContext(context.Background(), `INSERT INTO name_group (name, grouping) VALUES (?, ?)`, item.Name, item.Grouping)
 		default:
 			if !slices.Contains(objectTables, item.Table) {
 				t.Fatalf("unknown table %q in the test data", item.Table)
 			}
 			// The table name is one of the fixed names above.
-			_, err = db.Exec(`INSERT INTO `+item.Table+` (handle, json_data) VALUES (?, ?)`, item.Handle, item.JSON) // #nosec G202
+			_, err = db.ExecContext(context.Background(), `INSERT INTO `+item.Table+` (handle, json_data) VALUES (?, ?)`, item.Handle, item.JSON) // #nosec G202
 		}
 		if err != nil {
 			t.Fatal(err)
@@ -104,7 +105,7 @@ func Exec(t testing.TB, dir, query string, args ...any) {
 		t.Fatal(err)
 	}
 	defer func() { _ = db.Close() }()
-	if _, err := db.Exec(query, args...); err != nil {
+	if _, err := db.ExecContext(context.Background(), query, args...); err != nil {
 		t.Fatal(err)
 	}
 }

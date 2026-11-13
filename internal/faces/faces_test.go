@@ -2,6 +2,7 @@ package faces
 
 import (
 	"encoding/json"
+	"errors"
 	"image"
 	"image/draw"
 	"image/png"
@@ -169,7 +170,7 @@ func TestNewChecksTheRecognitionModel(t *testing.T) {
 	if err := os.WriteFile(path, []byte("not the model"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := New(path); err != ErrModel {
+	if _, err := New(path); !errors.Is(err, ErrModel) {
 		t.Fatalf("a wrong file: %v", err)
 	}
 }

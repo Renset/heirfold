@@ -40,16 +40,16 @@ const namespace = "http://gramps-project.org/xml/1.7.2/"
 // Locate returns the database file for a path. The path can be the file
 // itself or the directory of a Gramps tree.
 func Locate(path string) (string, error) {
-	info, err := os.Stat(path)
+	info, err := os.Stat(path) // #nosec G703 -- the administrator chose this path.
 	if err != nil {
 		return "", fmt.Errorf("%w: %s", ErrNotFound, path)
 	}
 	if info.IsDir() {
-		if backend, err := os.ReadFile(filepath.Join(path, "database.txt")); err == nil && strings.TrimSpace(string(backend)) != "sqlite" { // #nosec G304 -- the administrator chose this path.
+		if backend, err := os.ReadFile(filepath.Join(path, "database.txt")); err == nil && strings.TrimSpace(string(backend)) != "sqlite" { // #nosec G304 G703 -- the administrator chose this path.
 			return "", fmt.Errorf("%w: the tree uses the %q backend", ErrUnsupported, strings.TrimSpace(string(backend)))
 		}
 		path = filepath.Join(path, "sqlite.db")
-		if _, err := os.Stat(path); err != nil {
+		if _, err := os.Stat(path); err != nil { // #nosec G703 -- the administrator chose this path.
 			return "", fmt.Errorf("%w: %s", ErrNotFound, path)
 		}
 	}

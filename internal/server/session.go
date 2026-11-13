@@ -98,7 +98,7 @@ func (s *Server) setCookie(w http.ResponseWriter, name, value string, lifetime t
 func (s *Server) currentSession(w http.ResponseWriter, r *http.Request) (*store.User, *store.Session, []byte, error) {
 	cookie, err := r.Cookie(s.cookieName(sessionCookie))
 	if err != nil {
-		return nil, nil, nil, nil
+		return nil, nil, nil, nil //nolint:nilerr // a request without the cookie has no session; that is no error.
 	}
 	hash := auth.HashToken(cookie.Value)
 	user, session, extended, err := s.store.SessionUser(r.Context(), hash, sessionLifetime)

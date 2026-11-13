@@ -2,6 +2,8 @@ module github.com/Renset/heirfold
 
 go 1.27.3
 
+toolchain go1.27.4
+
 require modernc.org/sqlite v1.61.1
 
 require (

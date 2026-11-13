@@ -32,3 +32,8 @@ formatters:
   enable:
     - gofmt
     - goimports
+
+issues:
+  # The report shows every finding, also many of one kind.
+  max-issues-per-linter: 0
+  max-same-issues: 0

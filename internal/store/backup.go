@@ -62,7 +62,7 @@ func (s *Store) Backup(ctx context.Context, dir string) (string, error) {
 	}
 	entries, err := os.ReadDir(dir)
 	if err != nil {
-		return path, nil
+		return path, nil //nolint:nilerr // the copy is written; only the removal of old copies waits.
 	}
 	var names []string
 	for _, entry := range entries {

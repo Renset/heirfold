@@ -124,11 +124,13 @@ func (r *reader) next() (field int, wire int, number uint64, bytes []byte, err e
 		if size, err = r.varint(); err != nil {
 			return 0, 0, 0, nil, err
 		}
-		if size > uint64(len(r.data)-r.at) {
+		left := len(r.data) - r.at
+		if left < 0 || size > uint64(left) { // #nosec G115 -- left is not negative here.
 			return 0, 0, 0, nil, ErrFormat
 		}
-		bytes = r.data[r.at : r.at+int(size)]
-		r.at += int(size)
+		length := int(size) // #nosec G115 -- size is at most left, and left is an int.
+		bytes = r.data[r.at : r.at+length]
+		r.at += length
 	case 5:
 		if r.at+4 > len(r.data) {
 			return 0, 0, 0, nil, ErrFormat
@@ -195,9 +197,7 @@ func parseTensor(data []byte) (name string, tensor *Tensor, whole []int64, err e
 		case 2:
 			kind = number
 		case 4:
-			if wire == 2 {
-				floatData = append(floatData, floats(bytes)...)
-			} else if wire == 5 {
+			if wire == 2 || wire == 5 {
 				floatData = append(floatData, floats(bytes)...)
 			}
 		case 7:

@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"errors"
 	"math"
 	"testing"
 
@@ -196,10 +197,10 @@ func TestFoundFacesSuggestPeople(t *testing.T) {
 	}
 
 	// A guest gets nothing: the photos are hidden for the guest.
-	if _, err := st.View(privacy.Public).FoundFaces(context.Background(), fresh); err != ErrNotFound {
+	if _, err := st.View(privacy.Public).FoundFaces(context.Background(), fresh); !errors.Is(err, ErrNotFound) {
 		t.Fatalf("a guest: %v", err)
 	}
-	if _, err := st.View(privacy.Full).FoundFaces(context.Background(), "O9999"); err != ErrNotFound {
+	if _, err := st.View(privacy.Full).FoundFaces(context.Background(), "O9999"); !errors.Is(err, ErrNotFound) {
 		t.Fatalf("an unknown photo: %v", err)
 	}
 }

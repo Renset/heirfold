@@ -53,7 +53,7 @@ func CheckMapTiles(template string) error {
 	filled := strings.NewReplacer("{z}", "1", "{x}", "1", "{y}", "1").Replace(template)
 	address, err := url.Parse(filled)
 	local := err == nil && (address.Hostname() == "127.0.0.1" || address.Hostname() == "localhost")
-	if err != nil || address.Host == "" || (address.Scheme != "https" && !(address.Scheme == "http" && local)) ||
+	if err != nil || address.Host == "" || (address.Scheme != "https" && (address.Scheme != "http" || !local)) ||
 		!strings.Contains(template, "{z}") || !strings.Contains(template, "{x}") || !strings.Contains(template, "{y}") ||
 		strings.ContainsAny(filled, "{}") || address.User != nil {
 		return ErrMapTiles
@@ -204,23 +204,28 @@ func (t *tileStore) sweep(now time.Time) {
 		size int64
 	}
 	var files []entry
+	var stale []string
 	var total int64
 	_ = filepath.WalkDir(t.dir, func(path string, d fs.DirEntry, err error) error {
 		if err != nil || d.IsDir() {
-			return nil
+			return nil //nolint:nilerr // a folder that the walk cannot read does not stop the clean-up.
 		}
 		info, err := d.Info()
 		if err != nil {
-			return nil
+			return nil //nolint:nilerr // a file that left in the meantime does not stop the clean-up.
 		}
 		if now.Sub(info.ModTime()) > tileKeep || strings.HasPrefix(d.Name(), ".new-") && now.Sub(info.ModTime()) > time.Hour {
-			_ = os.Remove(path)
+			stale = append(stale, path)
 			return nil
 		}
 		files = append(files, entry{path: path, at: info.ModTime(), size: info.Size()})
 		total += info.Size()
 		return nil
 	})
+	// The walk only lists. The files leave after it.
+	for _, path := range stale {
+		_ = os.Remove(path)
+	}
 	if total <= maxTileCache {
 		return
 	}
