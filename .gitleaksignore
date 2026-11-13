@@ -1,0 +1,8 @@
+# Findings of gitleaks that are no secrets. One line is one finding:
+# commit:file:rule:line.
+#
+# The first commit has an invented mail key in three tests of the mail
+# package. It looked like a real key. Later commits use a shorter one.
+86f84edfceef4ec142c7be366087c541396f8fb0:internal/mail/mail_test.go:generic-api-key:421
+86f84edfceef4ec142c7be366087c541396f8fb0:internal/mail/mail_test.go:generic-api-key:487
+86f84edfceef4ec142c7be366087c541396f8fb0:internal/mail/mail_test.go:generic-api-key:508
